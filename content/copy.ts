@@ -26,17 +26,6 @@ export const homeCopy = {
       "We exist to get people out of pain and back to their lives — with hands-on care that treats the cause, not the symptom, and tells you the truth about how long it will take.",
   },
 
-  value: {
-    eyebrow: "Relief starts here",
-    heading: "Treat the Cause. Not Just the Pain.",
-    body: "Painkillers quiet a symptom; they do not correct what produced it. Every visit begins with an examination, so treatment is aimed at the joint, disc or muscle actually responsible — and you leave knowing what is wrong and what the plan is.",
-  },
-
-  seoProse: {
-    eyebrow: "By the numbers",
-    body: `Spine Master is the practice of ${site.practitioner}, a spine and joints specialist and chiropractor based at ${site.clinic.building} in Phase 5, DHA, Lahore. The clinic treats lower back pain, sciatica, slipped and bulging discs, neck and shoulder pain, tension headaches, frozen shoulder, knee and hip joint pain, postural problems from desk work, and sports injuries. A first assessment runs about 45 minutes and covers history, postural analysis, range of motion and orthopaedic testing, followed by a report of findings in plain language. Most patients follow a plan of four to six sessions; mechanical low back pain and neck strain commonly ease within one to two sessions, sciatica within two to three, and disc-related presentations over an eight to twelve week corrective programme. Care is non-surgical throughout — spinal adjustment, joint mobilization and soft tissue therapy, followed by corrective exercise and posture coaching so the result holds. Patients travel from Phase 5, Gulberg, Model Town, Johar Town, Bahria Town and across Lahore. Appointments are usually available the same week on ${site.phone.display}.`,
-  },
-
   capabilities: {
     eyebrow: "What you get",
     heading: "Complete Spine and Joint Care Under One Roof",

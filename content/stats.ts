@@ -1,19 +1,5 @@
 import { site } from "./site";
 
-export interface Stat {
-  label: string;
-  value: string;
-  /** PLACEHOLDER numbers must be confirmed by the practice before launch. */
-  placeholder?: boolean;
-}
-
-/** S5 — three stat cards under the value section. */
-export const valueStats: readonly Stat[] = [
-  { label: "First Assessment", value: "45 Minutes", placeholder: true },
-  { label: "Typical Plan", value: "4–6 Sessions", placeholder: true },
-  { label: "Approach", value: "100% Non-Surgical" },
-] as const;
-
 export interface CounterStat {
   label: string;
   value: number;

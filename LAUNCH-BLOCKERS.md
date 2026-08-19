@@ -20,8 +20,8 @@ a trust problem and, in most jurisdictions, a regulatory one.
 conditions are placeholders. The section header already says these are typical
 ranges rather than promises, but the numbers still need to come from Dr. Ahmad.
 
-The same figures are restated in the SEO prose block (`content/copy.ts` →
-`seoProse.body`). **Update both, or they will disagree.**
+These figures now appear in only one place. The SEO prose block that used to
+restate them was removed — see item 5.
 
 ## 3. CLAIM — credentials row
 
@@ -38,11 +38,23 @@ removed. Do not list a membership the practice cannot evidence.
 - `Patients Treated: 5,000+` — PLACEHOLDER.
 - `Years in Practice: 10+` — PLACEHOLDER.
 
-## 5. CLAIM — value stat cards
+## 5. SEO — the crawlable prose block was removed
 
-`content/stats.ts` → `valueStats`. `45 Minutes` (first assessment) and
-`4–6 Sessions` (typical plan) are placeholders. `100% Non-Surgical` is a factual
-description of chiropractic care and can stay.
+The "By The Numbers" section and the value/stat-card section were both removed
+from the homepage at the client's request. Two consequences to be aware of:
+
+- The prose block was the page's main body of indexable text. It carried the
+  condition names (sciatica, slipped disc, frozen shoulder, sports injury), the
+  locality terms (Phase 5, Gulberg, Model Town, Johar Town, Bahria Town) and the
+  practitioner's name and address in crawlable form. Without it the homepage has
+  very little text for search engines to rank on for "chiropractor in Lahore"
+  and similar queries.
+- The stat cards (`45 Minutes`, `4–6 Sessions`, `100% Non-Surgical`) are gone
+  with it, so those placeholder figures no longer need confirming.
+
+If local search matters, that content should return somewhere — an About or
+Conditions page would carry it naturally. The copy is recoverable from git
+history (`content/copy.ts` → `value` and `seoProse`).
 
 ## 6. Name spelling is inconsistent with the logo
 

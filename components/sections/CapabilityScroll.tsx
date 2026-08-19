@@ -12,8 +12,18 @@ import { useRef } from "react";
 
 gsap.registerPlugin(ScrollTrigger);
 
-/** Scroll distance per capability. 3 × 150vh ≈ the reference's 550vh for 3 tabs. */
-const VH_PER_STEP = 150;
+/**
+ * Scroll distance the pinned panel holds for.
+ *
+ * Deliberately shorter on small screens. 150vh per step is ~3800px of pinned
+ * scrolling on a phone, and a panel that will not move for that long reads as
+ * a broken page rather than an effect — 90vh per step keeps the same sequence
+ * without the dead travel.
+ *
+ * The values assume three capabilities; they are written as static classes
+ * because Tailwind cannot see a computed string.
+ */
+const SPACER_HEIGHT = "h-[270vh] lg:h-[450vh]";
 
 /**
  * S7. The sticky-tabs scroll: a tall spacer holds a `position: sticky` panel at
@@ -40,40 +50,37 @@ export function CapabilityScroll() {
     () => {
       if (reducedMotion) return;
 
-      const mm = gsap.matchMedia();
-
-      mm.add("(min-width: 1024px)", () => {
-        const paint = (index: number) => {
-          copyRefs.current.forEach((el, i) => {
-            if (el) gsap.set(el, { autoAlpha: i === index ? 1 : 0 });
-          });
-          mediaRefs.current.forEach((el, i) => {
-            if (el) gsap.set(el, { autoAlpha: i === index ? 1 : 0, yPercent: i === index ? 0 : 100 });
-          });
-        };
-
-        paint(0);
-
-        const trigger = ScrollTrigger.create({
-          trigger: rootRef.current,
-          start: "top top",
-          end: "bottom bottom",
-          scrub: true,
-          onUpdate: (self) => {
-            const index = Math.min(
-              capabilities.length - 1,
-              Math.floor(self.progress * capabilities.length),
-            );
-            if (index === activeIndex.current) return;
-            activeIndex.current = index;
-            paint(index);
-          },
+      // No matchMedia gate: the scrub now drives every width. It used to be
+      // lg-only, which is why widening the markup alone left the panel pinned
+      // but frozen on step one.
+      const paint = (index: number) => {
+        copyRefs.current.forEach((el, i) => {
+          if (el) gsap.set(el, { autoAlpha: i === index ? 1 : 0 });
         });
+        mediaRefs.current.forEach((el, i) => {
+          if (el) gsap.set(el, { autoAlpha: i === index ? 1 : 0, yPercent: i === index ? 0 : 100 });
+        });
+      };
 
-        return () => trigger.kill();
+      paint(0);
+
+      const trigger = ScrollTrigger.create({
+        trigger: rootRef.current,
+        start: "top top",
+        end: "bottom bottom",
+        scrub: true,
+        onUpdate: (self) => {
+          const index = Math.min(
+            capabilities.length - 1,
+            Math.floor(self.progress * capabilities.length),
+          );
+          if (index === activeIndex.current) return;
+          activeIndex.current = index;
+          paint(index);
+        },
       });
 
-      return () => mm.revert();
+      return () => trigger.kill();
     },
     { scope: rootRef, dependencies: [reducedMotion] },
   );
@@ -82,22 +89,21 @@ export function CapabilityScroll() {
     <>
       {/* ---- lg and up: tall spacer + sticky panel ---- */}
       {!reducedMotion && (
-        <div
-          ref={rootRef}
-          className="relative hidden lg:block"
-          style={{ height: `${capabilities.length * VH_PER_STEP}vh` }}
-        >
+        <div ref={rootRef} className={cn("relative", SPACER_HEIGHT)}>
           <div className="sticky top-[5vh] h-[90vh]">
-            <div className="grid h-full grid-cols-[0.4fr_1fr] gap-6">
-              {/* left: cross-fading copy */}
-              <div className="relative flex flex-col justify-end rounded-sm-media bg-sm-ink-800 p-8">
+            {/* Media above, copy below on a phone; side by side from lg. The
+                scrub itself is identical at every width — only the arrangement
+                inside the pinned panel changes. */}
+            <div className="flex h-full flex-col gap-4 lg:grid lg:grid-cols-[0.4fr_1fr] lg:gap-6">
+              {/* copy */}
+              <div className="relative order-2 h-52 shrink-0 rounded-sm-media bg-sm-ink-800 lg:order-1 lg:h-auto lg:flex lg:flex-col lg:justify-end lg:p-8">
                 {capabilities.map((capability, index) => (
                   <div
                     key={capability.id}
                     ref={(el) => {
                       copyRefs.current[index] = el;
                     }}
-                    className="absolute inset-0 flex flex-col justify-between p-8"
+                    className="absolute inset-0 flex flex-col justify-between p-6 lg:p-8"
                   >
                     <p className="font-sm-mono text-sm-caption uppercase tracking-[0.1em] text-sm-red-600">
                       <span className="tnum">{String(index + 1).padStart(2, "0")}</span>
@@ -124,8 +130,8 @@ export function CapabilityScroll() {
                 ))}
               </div>
 
-              {/* right: media rising into place */}
-              <div className="relative overflow-hidden rounded-sm-media border border-white/10">
+              {/* media rising into place */}
+              <div className="relative order-1 min-h-0 flex-1 overflow-hidden rounded-sm-media border border-white/10 lg:order-2">
                 {capabilities.map((capability, index) => (
                   <div
                     key={capability.id}
@@ -143,10 +149,10 @@ export function CapabilityScroll() {
         </div>
       )}
 
-      {/* ---- below lg / reduced motion: plain stacked list ---- */}
+      {/* ---- reduced motion: plain stacked list, no pinning ---- */}
       {/* Centred to match the section header above it — a left-ragged stack
           under a centred header reads as two different layouts. */}
-      <div className={cn("flex flex-col gap-14 text-center", !reducedMotion && "lg:hidden")}>
+      <div className={cn("flex flex-col gap-14 text-center", !reducedMotion && "hidden")}>
         {capabilities.map((capability, index) => (
           <article key={capability.id}>
             <p className="font-sm-mono text-sm-caption uppercase tracking-[0.1em] text-sm-red-600">

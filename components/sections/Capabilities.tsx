@@ -15,7 +15,11 @@ export function Capabilities() {
   return (
     <section
       id="treatments"
-      className="on-ink scroll-mt-20 rounded-t-sm-frame bg-sm-ink-950 pb-24 text-sm-text-inv md:pb-32"
+      // `relative z-10` is load-bearing: the mission above is position:sticky,
+      // which makes it a POSITIONED element, and positioned elements paint over
+      // static siblings. Without its own stacking position this card renders
+      // interleaved with the text it is supposed to be covering.
+      className="on-ink relative z-10 scroll-mt-20 rounded-t-sm-frame bg-sm-ink-950 pb-24 text-sm-text-inv md:pb-32"
     >
       <Container className="py-24 md:py-32 lg:py-40">
         <SectionHeader

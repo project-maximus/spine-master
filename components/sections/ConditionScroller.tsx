@@ -1,16 +1,25 @@
 "use client";
 
-import { TextLink } from "@/components/ui/TextLink";
 import { conditions } from "@/content/conditions";
 import { homeCopy } from "@/content/copy";
 import { ArrowLeft, ArrowRight } from "lucide-react";
+import Image from "next/image";
+import Link from "next/link";
 import { useRef } from "react";
 
 /**
  * S8. Native horizontal scroll with x-mandatory snap — no scroll hijacking.
  * The arrows are a convenience on top of a region that is already fully
- * keyboard operable: every card is focusable and the track is a labelled,
+ * keyboard operable: every card is a link and the track is a labelled,
  * tabbable scroll container.
+ *
+ * Each card is a full-bleed photograph with the condition named at the foot.
+ * Pointing at it swaps that for the two timings set large, plus the link.
+ *
+ * The timings are NOT hover-only. They sit in the resting state as a mono
+ * line as well, because `hover` never fires on a touch screen — a card whose
+ * only numbers appear on hover is a card whose numbers a phone user never
+ * sees. Hover just promotes what is already there.
  */
 export function ConditionScroller() {
   const trackRef = useRef<HTMLDivElement>(null);
@@ -54,40 +63,58 @@ export function ConditionScroller() {
         className="sm-snap-x flex gap-5 overflow-x-auto px-5 pb-2 scroll-pl-5 md:px-10 md:scroll-pl-10 lg:px-12 lg:scroll-pl-12"
       >
         {conditions.map((condition) => (
-          <article
-            key={condition.name}
+          <Link
+            key={condition.slug}
+            href="#contact"
             data-condition-card
-            tabIndex={0}
-            className="sm-snap-item flex w-[85vw] shrink-0 flex-col justify-between gap-10 rounded-sm-card border border-sm-red-600/35 p-7 sm:w-[380px] md:p-8"
+            className="sm-snap-item group relative aspect-[3/4] w-[76vw] shrink-0 overflow-hidden rounded-sm-media sm:w-[330px] lg:w-[360px]"
           >
-            <div>
+            <Image
+              src={`/images/condition-${condition.slug}.jpg`}
+              alt={condition.imageCaption}
+              fill
+              sizes="(min-width: 1024px) 360px, (min-width: 640px) 330px, 76vw"
+              className="object-cover transition-transform duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:scale-105"
+              style={{ filter: "grayscale(1) contrast(1.05) brightness(0.62)" }}
+            />
+
+            {/* base wash, deepening as the stats come up */}
+            <div
+              className="absolute inset-0 bg-gradient-to-t from-sm-ink-950 via-sm-ink-950/45 to-sm-ink-950/20 transition-colors duration-300 group-hover:bg-sm-ink-950/80 group-focus-visible:bg-sm-ink-950/80"
+              aria-hidden="true"
+            />
+
+            {/* resting: name + timings */}
+            <div className="absolute inset-x-0 bottom-0 p-6 transition-opacity duration-300 group-hover:opacity-0 group-focus-visible:opacity-0">
               <h3 className="font-sm-display text-sm-h3 text-sm-text-inv">{condition.name}</h3>
-              <p className="mt-3 text-sm-small text-sm-text-inv-2">{condition.description}</p>
+              <p className="mt-2 font-sm-mono text-sm-caption uppercase tracking-[0.1em] text-sm-text-inv-2">
+                <span className="tnum">{condition.firstRelief}</span>
+                <span className="mx-2 text-sm-text-inv-3" aria-hidden="true">
+                  ·
+                </span>
+                <span className="tnum">{condition.fullPlan}</span>
+              </p>
             </div>
 
-            <div>
-              <div className="flex flex-wrap items-baseline gap-x-8 gap-y-4">
-                <div>
-                  <p className="tnum font-sm-display text-sm-h2 text-sm-red-600">{condition.firstRelief}</p>
-                  <p className="mt-1.5 font-sm-mono text-sm-caption uppercase tracking-[0.1em] text-sm-red-600">
-                    {homeCopy.conditions.withLabel}
-                  </p>
-                </div>
-                <div>
-                  <p className="tnum font-sm-display text-sm-h2 text-sm-text-inv">{condition.fullPlan}</p>
-                  <p className="mt-1.5 font-sm-mono text-sm-caption uppercase tracking-[0.1em] text-sm-text-inv-3">
-                    {homeCopy.conditions.withoutLabel}
-                  </p>
-                </div>
+            {/* on point: the same numbers, set large */}
+            <div className="absolute inset-0 flex flex-col items-center justify-center gap-7 p-6 text-center opacity-0 transition-opacity duration-300 group-hover:opacity-100 group-focus-visible:opacity-100">
+              <div>
+                <p className="tnum font-sm-display text-sm-h2 text-sm-red-600">{condition.firstRelief}</p>
+                <p className="mt-2 font-sm-mono text-sm-caption uppercase tracking-[0.12em] text-sm-text-inv-2">
+                  {homeCopy.conditions.withLabel}
+                </p>
               </div>
-
-              <div className="mt-7">
-                <TextLink href="#contact" onInk>
-                  Learn More
-                </TextLink>
+              <div>
+                <p className="tnum font-sm-display text-sm-h2 text-sm-text-inv">{condition.fullPlan}</p>
+                <p className="mt-2 font-sm-mono text-sm-caption uppercase tracking-[0.12em] text-sm-text-inv-2">
+                  {homeCopy.conditions.withoutLabel}
+                </p>
               </div>
+              <span className="mt-2 border-b border-sm-text-inv pb-1 font-sm-mono text-sm-caption uppercase tracking-[0.12em] text-sm-text-inv">
+                Learn More
+              </span>
             </div>
-          </article>
+          </Link>
         ))}
       </div>
     </div>

@@ -4,16 +4,6 @@ export interface ProcessStep {
   description: string;
 }
 
-/** S9 — the chips feeding the loop. */
-export const intakeChannels: readonly string[] = [
-  "Call",
-  "WhatsApp",
-  "Walk-In",
-  "Referral",
-  "Online Form",
-  "Facebook",
-] as const;
-
 /** S9 — the four-step care loop. */
 export const processSteps: readonly ProcessStep[] = [
   {
