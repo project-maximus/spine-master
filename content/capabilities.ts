@@ -1,3 +1,9 @@
+/**
+ * NOTE: the `asset` images are licensed Unsplash stock, not photographs of
+ * this practice. The captions describe what each picture literally shows and
+ * double as its alt text — do not reword them to imply they were taken at the
+ * clinic. Replace with real photography when it exists; see LAUNCH-BLOCKERS.md.
+ */
 export interface Capability {
   id: string;
   label: string;
@@ -17,7 +23,7 @@ export const capabilities: readonly Capability[] = [
     bullets: ["Postural Analysis", "Range of Motion Testing", "Report of Findings"],
     asset: {
       id: "capability-assessment",
-      caption: "Posture and range-of-motion assessment in the treatment room",
+      caption: "A clinician assessing a patient's knee and leg range of motion on a treatment table",
     },
   },
   {
@@ -26,7 +32,7 @@ export const capabilities: readonly Capability[] = [
     bullets: ["Spinal Adjustment", "Joint Mobilization", "Soft Tissue Therapy"],
     asset: {
       id: "capability-treatment",
-      caption: "Hands-on spinal adjustment on the treatment table",
+      caption: "A chiropractor performing a side-lying spinal adjustment",
     },
   },
   {
@@ -35,7 +41,7 @@ export const capabilities: readonly Capability[] = [
     bullets: ["Corrective Exercise", "Posture Coaching", "Relapse Prevention"],
     asset: {
       id: "capability-recovery",
-      caption: "Patient working through a prescribed corrective exercise",
+      caption: "A person stretching forward to the foot during a mobility exercise",
     },
   },
 ] as const;

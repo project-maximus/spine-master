@@ -1,6 +1,6 @@
 "use client";
 
-import { AssetSlot } from "@/components/motion/AssetSlot";
+import { CapabilityMedia } from "@/components/sections/CapabilityMedia";
 import { useIsReducedMotion } from "@/components/motion/MotionProvider";
 import { PlusItem } from "@/components/ui/PlusItem";
 import { capabilities } from "@/content/capabilities";
@@ -134,16 +134,7 @@ export function CapabilityScroll() {
                     }}
                     className="absolute inset-0"
                   >
-                    <AssetSlot
-                      kind="image"
-                      id={capability.asset.id}
-                      alt={`${capability.label} at the clinic`}
-                      caption={capability.asset.caption}
-                      aspectRatio="4 / 3"
-                      sizes="60vw"
-                      tone="ink"
-                      className="h-full w-full"
-                    />
+                    <CapabilityMedia id={capability.id} sizes="(min-width: 1024px) 60vw, 90vw" />
                   </div>
                 ))}
               </div>
@@ -175,16 +166,9 @@ export function CapabilityScroll() {
                 </PlusItem>
               ))}
             </ul>
-            <AssetSlot
-              kind="image"
-              id={capability.asset.id}
-              alt={`${capability.label} at the clinic`}
-              caption={capability.asset.caption}
-              aspectRatio="4 / 3"
-              sizes="90vw"
-              tone="ink"
-              className="mt-6 w-full rounded-sm-media border border-white/10"
-            />
+            <div className="mt-8 aspect-[4/3] w-full overflow-hidden rounded-sm-media border border-white/10">
+              <CapabilityMedia id={capability.id} sizes="90vw" />
+            </div>
           </article>
         ))}
       </div>
