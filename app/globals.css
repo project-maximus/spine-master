@@ -1,0 +1,244 @@
+@import "tailwindcss";
+
+/* ============================================================================
+   SpineMaster — single token namespace (`sm-`). Components reference tokens
+   only; there is no raw hex anywhere in TSX.
+
+   The accent is sampled directly from the supplied logo artwork: the red
+   line-work measures #DE272C and the rest of the mark is pure black. The
+   whole palette is built from those two facts plus a warm bone paper.
+   ========================================================================= */
+
+@theme {
+  /* ---- Fonts (bound to next/font variables in app/layout.tsx) ----
+     Display and body are the same family — Jost, a Futura revival chosen to
+     match the geometric sans of the logo wordmark. The mono face is reserved
+     for the `//` and `+` utility device. */
+  --font-sm-sans: var(--font-jost), ui-sans-serif, system-ui, sans-serif;
+  --font-sm-display: var(--font-jost), ui-sans-serif, system-ui, sans-serif;
+  --font-sm-mono: var(--font-azeret-mono), ui-monospace, SFMono-Regular, monospace;
+
+  /* ---- Ink scale (the logo's black, warmed by a hair) ---- */
+  --color-sm-ink-950: #0b0b0c;
+  --color-sm-ink-900: #121214;
+  --color-sm-ink-800: #1b1b1e;
+  --color-sm-ink-700: #2e2e32;
+  --color-sm-ink-100: #e9e9ea;
+
+  /* ---- Neutrals ---- */
+  --color-sm-white: #ffffff;
+  --color-sm-bone: #f6f4f1; /* primary light surface */
+  --color-sm-mist: #efece7; /* alternating light surface */
+  --color-sm-line: #e2dfda;
+  --color-sm-line-dark: rgb(255 255 255 / 0.12);
+
+  /* ---- Text on light (measured against --color-sm-bone #f6f4f1) ---- */
+  --color-sm-text: #0b0b0c; /* 18.4:1 — AAA */
+  --color-sm-text-2: #56555a; /* 7.1:1 — AAA body */
+  --color-sm-text-3: #86848a; /* 3.6:1 — LARGE TEXT / UI ONLY, never body copy */
+
+  /* ---- Text on ink (measured against --color-sm-ink-950 #0b0b0c) ---- */
+  --color-sm-text-inv: #ffffff; /* 19.1:1 — AAA */
+  --color-sm-text-inv-2: #c6c4c8; /* 11.3:1 — AAA body */
+  --color-sm-text-inv-3: #8b898f; /* 5.3:1 — AA body, used for meta only */
+
+  /* ---- Brand red ---------------------------------------------------------
+     red-600 is the logo value, and by design it is the ONLY red that appears
+     as text anywhere — headline, label or caption, light surface or dark.
+     Measured:
+       #DE272C behind white text .... 4.73:1  → AA, red fills are safe
+       #DE272C on bone .............. 4.31:1  → AA-large (≥24px) / UI only
+       #DE272C on ink-950 ........... 4.12:1  → AA-large (≥24px) / UI only
+     Consequence, accepted deliberately for brand consistency: red text below
+     24px (the mono `FIRST RELIEF` / step / pillar labels) sits under the
+     4.5:1 bar for small text. Everything red at display size is compliant.
+     To make the small labels compliant, set them in text-inv-2 rather than
+     lightening the red — a second red would defeat the point. */
+  --color-sm-red-600: #de272c; /* THE logo red — every red on the site */
+  --color-sm-red-700: #c81e23; /* hover/pressed state for red fills only */
+
+  /* ---- Radius ---- */
+  --radius-sm-chip: 8px;
+  --radius-sm-card: 12px;
+  --radius-sm-media: 16px;
+  --radius-sm-frame: 32px; /* hero framed-media inset */
+
+  /* ---- Shadows (the only two permitted) ---- */
+  --shadow-sm-card: 0 1px 2px rgb(0 0 0 / 0.06);
+  --shadow-sm-float: 0 24px 48px -24px rgb(0 0 0 / 0.35);
+
+  /* ---- Type scale ---- */
+  /* A geometric sans needs tighter tracking and more weight than a serif to
+     hold the display roles — hence 500 across the heading steps and negative
+     letter-spacing that grows with size. */
+  --text-sm-display-xl: clamp(2.25rem, 1.1rem + 3.5vw, 3.75rem);
+  --text-sm-display-xl--line-height: 1;
+  --text-sm-display-xl--letter-spacing: -0.035em;
+  --text-sm-display-xl--font-weight: 500;
+
+  --text-sm-display: clamp(2.25rem, 1.2rem + 3.4vw, 3.75rem);
+  --text-sm-display--line-height: 1.08;
+  --text-sm-display--letter-spacing: -0.03em;
+  --text-sm-display--font-weight: 500;
+
+  --text-sm-h1: clamp(2rem, 1.3rem + 2.4vw, 3rem);
+  --text-sm-h1--line-height: 1.1;
+  --text-sm-h1--letter-spacing: -0.03em;
+  --text-sm-h1--font-weight: 500;
+
+  --text-sm-h2: clamp(1.75rem, 1.2rem + 1.8vw, 2.375rem);
+  --text-sm-h2--line-height: 1.16;
+  --text-sm-h2--letter-spacing: -0.025em;
+  --text-sm-h2--font-weight: 500;
+
+  --text-sm-h3: clamp(1.3125rem, 1.1rem + 0.8vw, 1.625rem);
+  --text-sm-h3--line-height: 1.28;
+  --text-sm-h3--letter-spacing: -0.02em;
+  --text-sm-h3--font-weight: 500;
+
+  --text-sm-h4: clamp(1.125rem, 1.05rem + 0.3vw, 1.25rem);
+  --text-sm-h4--line-height: 1.4;
+  --text-sm-h4--letter-spacing: -0.01em;
+  --text-sm-h4--font-weight: 500;
+
+  /* Azeret is a wide mono, so it needs less tracking than a narrow coding
+     face would at the same size — 0.14em opened these labels into gappy
+     lettering rather than a set line. */
+  --text-sm-eyebrow: 0.75rem;
+  --text-sm-eyebrow--line-height: 1.4;
+  --text-sm-eyebrow--letter-spacing: 0.08em;
+  --text-sm-eyebrow--font-weight: 500;
+
+  --text-sm-body-lg: clamp(1.0625rem, 1rem + 0.3vw, 1.1875rem);
+  --text-sm-body-lg--line-height: 1.65;
+
+  --text-sm-body: 1rem;
+  --text-sm-body--line-height: 1.65;
+
+  --text-sm-small: 0.875rem;
+  --text-sm-small--line-height: 1.55;
+  --text-sm-small--letter-spacing: 0.005em;
+
+  --text-sm-caption: 0.75rem;
+  --text-sm-caption--line-height: 1.5;
+  --text-sm-caption--letter-spacing: 0.02em;
+  --text-sm-caption--font-weight: 500;
+
+  --text-sm-stat: clamp(2.5rem, 1rem + 5.4vw, 4.25rem);
+  --text-sm-stat--line-height: 1;
+  --text-sm-stat--letter-spacing: -0.035em;
+  --text-sm-stat--font-weight: 500;
+
+  --text-sm-button: 0.9375rem;
+  --text-sm-button--line-height: 1;
+  --text-sm-button--font-weight: 600;
+}
+
+/* ============================================================================
+   Base
+   ========================================================================= */
+
+html {
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  background-color: var(--color-sm-bone);
+  color: var(--color-sm-text);
+  font-family: var(--font-sm-sans);
+  font-size: var(--text-sm-body);
+  line-height: var(--text-sm-body--line-height);
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Locked while the mobile drawer is open — set alongside lenis.stop(), never
+   by mutating document.body.style directly. */
+body.sm-scroll-locked {
+  overflow: hidden;
+}
+
+/* Counters, stat values and every comparison time — numerals must not jitter
+   while a value is tweening. */
+.tnum {
+  font-feature-settings: "tnum";
+  font-variant-numeric: tabular-nums;
+}
+
+/* Single global focus rule. `.on-ink` flips the ring for dark surfaces. */
+:focus-visible {
+  outline: 2px solid var(--color-sm-ink-700);
+  outline-offset: 3px;
+  border-radius: 2px;
+}
+
+.on-ink :focus-visible {
+  outline-color: var(--color-sm-white);
+}
+
+/* Pre-animation state for <Reveal>. A class rather than an inline style, so
+   the content is in the DOM for non-JS and assistive tech; GSAP's autoAlpha
+   clears it. */
+.gsap-hidden {
+  visibility: hidden;
+}
+
+::selection {
+  background-color: var(--color-sm-red-600);
+  color: var(--color-sm-white);
+}
+
+/* ============================================================================
+   Marquees — CSS only (§6.1). Doubled track translated -50%.
+   ========================================================================= */
+
+@keyframes sm-marquee {
+  from {
+    transform: translate3d(0, 0, 0);
+  }
+  to {
+    transform: translate3d(-50%, 0, 0);
+  }
+}
+
+.sm-marquee-track {
+  display: flex;
+  width: max-content;
+  animation: sm-marquee var(--sm-marquee-duration, 28s) linear infinite;
+  animation-play-state: var(--sm-marquee-state, running);
+}
+
+.sm-marquee-root:hover .sm-marquee-track {
+  animation-play-state: paused;
+}
+
+/* Horizontal scroller (S8) — native scroll + snap, no JS scroll hijacking. */
+.sm-snap-x {
+  scroll-snap-type: x mandatory;
+  scrollbar-width: none;
+}
+
+.sm-snap-x::-webkit-scrollbar {
+  display: none;
+}
+
+.sm-snap-item {
+  scroll-snap-align: start;
+}
+
+/* ============================================================================
+   Reduced motion — a real path, not a token gesture. Lenis is never
+   instantiated (see SmoothScrollProvider), marquees stop here, and every
+   reveal is set to its final state by its own component.
+   ========================================================================= */
+
+@media (prefers-reduced-motion: reduce) {
+  .sm-marquee-track {
+    animation: none;
+  }
+
+  *,
+  *::before,
+  *::after {
+    scroll-behavior: auto !important;
+  }
+}
